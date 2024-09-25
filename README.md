@@ -30,7 +30,7 @@ Before running this project, ensure you have the following installed on your sys
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/yourusername/sanskrit-dict.git
-   cd dictionary-app
+   cd sanskrit-dict
 
 2. **Install the dependencies:**:
    ```bash
