@@ -1,6 +1,6 @@
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #f4f4f4;
+  background-color: #d3d0cb;
   color: #333;
   margin: 0;
   padding: 0;
@@ -11,7 +11,7 @@ body {
   height: 100vh; }
 
 header {
-  background-color: #204969;
+  background-color: #393e41;
   width: 100%;
   padding: 20px;
   text-align: center; }
@@ -42,24 +42,24 @@ input[type="text"] {
 
 button {
   margin-top: 10px;
-  width: 100%;
+  width: 630px;
   padding: 12px;
   border: none;
-  background-color: #e6af2e;
+  background-color: #2eb5e6;
   color: white;
   border-radius: 30px;
   font-size: 18px;
   cursor: pointer;
   transition: background-color 0.3s ease; }
   button:hover {
-    background-color: #c99418; }
+    background-color: #189ac9; }
 
 .suggestions {
-  position: absolute;
+  left: 20px;
+  position: relative;
   background-color: white;
-  border: 1px solid #ccc;
   border-radius: 5px;
-  width: 100%;
+  width: 550px;
   max-height: 150px;
   overflow-y: auto;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
@@ -70,7 +70,7 @@ button {
   cursor: pointer;
   border-bottom: 1px solid #ccc; }
   .suggestion-item:hover {
-    background-color: #204969;
+    background-color: #393e41;
     color: white; }
 
 .result-container {
@@ -80,7 +80,7 @@ button {
   text-align: left; }
 
 h2 {
-  color: #204969;
+  color: #393e41;
   font-size: 1.8rem;
   margin-bottom: 10px; }
 
