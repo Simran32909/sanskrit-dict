@@ -34,4 +34,4 @@ Before running this project, ensure you have the following installed on your sys
 
 4. **Run the Flask application:**:
    ```bash
-   python app.py
+   python main.py
