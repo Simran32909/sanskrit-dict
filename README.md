@@ -2,14 +2,6 @@
 
 A sleek, responsive web-based dictionary app built with Flask, HTML, SCSS, and JavaScript. The app allows users to search for words, view their meanings, and receive suggestions as they type.
 
-## Features
-
-- **Search Functionality**: Users can search for words to get their meanings from a predefined dictionary.
-- **Auto-suggestions**: As users type, suggestions from the dictionary appear in a dropdown, allowing for quick selection.
-- **Responsive Design**: The app is mobile-friendly and scales well on various screen sizes.
-- **Easy Customization**: You can modify the dictionary and SCSS to fit your needs.
-
-
 ## Technologies Used
 
 - **Backend**: Flask (Python)
