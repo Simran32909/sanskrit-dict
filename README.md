@@ -1,6 +1,6 @@
 # Sanskrit Dictionary App
 
-A sleek, responsive web-based dictionary app built with Flask, HTML, SCSS, and JavaScript. The app allows users to search for words, view their meanings, and receive suggestions as they type.
+A responsive web-based dictionary app built with Flask, HTML, SCSS, and JavaScript. The app allows users to search for words, view their meanings, and receive suggestions as they type.
 
 ## Technologies Used
 
