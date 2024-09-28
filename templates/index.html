@@ -5,6 +5,165 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sanskrit Dictionary</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e1e1e, #3a3a3a);
+            min-height: 100vh;
+            color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        header {
+            width: 100%;
+            background: linear-gradient(145deg, #92badc, #393e41);
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        header h1 a {
+            text-decoration: none;
+            color: rgb(171, 218, 211);
+            font-size: 36px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: color 0.3s ease;
+        }
+
+        header h1 a:hover {
+            color: #48d5ff;
+        }
+
+        .search-container {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 50px;
+            border: none;
+            font-size: 18px;
+            background: #2a2a2a;
+            color: #f5f5f5;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            outline: none;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7);
+            transform: scale(1.05);
+        }
+
+        button[type="submit"] {
+            margin-top: 20px;
+            padding: 12px 40px;
+            background: linear-gradient(145deg, #6ceefd, #393e41);
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background: linear-gradient(145deg, #00c6ff, #a6d6d0);
+            transform: scale(1.05);
+        }
+
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #1f1f1f;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 10;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .suggestion-item {
+            padding: 12px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            color: #f5f5f5;
+        }
+
+        .suggestion-item:hover {
+            background-color: #333;
+        }
+
+        .result-container {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .result h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #d3d0cb;
+        }
+
+        .result p {
+            font-size: 20px;
+            line-height: 1.6;
+            color: #f5f5f5;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: linear-gradient(145deg, #ffcc00, #ffcc00);
+            color: #333;
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+            z-index: 1000;
+            max-width: 300px;
+            font-size: 14px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+        }
+
+        .tooltip.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .linked-word {
+            color: #00c6ff;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .linked-word:hover {
+            color: #ffcc00;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -30,12 +189,15 @@
         </div>
     </div>
 
+    <div id="tooltip" class="tooltip"></div>
+
     <script>
         const wordInput = document.getElementById('word');
         const suggestionsBox = document.getElementById('suggestions');
         const lookupForm = document.getElementById('lookupForm');
         const meaningResult = document.getElementById('meaningResult');
         const wordResult = document.getElementById('wordResult');
+        const tooltip = document.getElementById('tooltip');
 
         wordInput.addEventListener('input', function() {
             let query = wordInput.value;
@@ -81,10 +243,40 @@
                 document.querySelectorAll('.linked-word').forEach(item => {
                     item.addEventListener('click', function(e) {
                         e.preventDefault();
-                        lookupWord(this.dataset.word);
+                        wordInput.value = this.dataset.word; // Set input to the clicked word
+                        suggestionsBox.innerHTML = ''; // Clear suggestions
+                        hideTooltip(); // Hide the tooltip when clicked
+                        lookupWord(this.dataset.word); // Look up the word
+                    });
+                    item.addEventListener('mouseover', function(e) {
+                        showTooltip(this.dataset.word, e.pageX, e.pageY);
+                    });
+                    item.addEventListener('mouseout', function() {
+                        hideTooltip(); // Hide tooltip when mouse leaves
                     });
                 });
             });
+        }
+
+        function showTooltip(word, x, y) {
+            fetch(`/lookup`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `word=${word}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                tooltip.textContent = data.meaning ? data.meaning : 'Meaning not found';
+                tooltip.style.left = `${x + 10}px`;
+                tooltip.style.top = `${y + 10}px`;
+                tooltip.classList.add('visible');
+            });
+        }
+
+        function hideTooltip() {
+            tooltip.classList.remove('visible');
         }
     </script>
 </body>

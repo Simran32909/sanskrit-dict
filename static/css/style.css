@@ -1,6 +1,6 @@
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #d3d0cb;
+  background-color: #5b2333;
   color: #333;
   margin: 0;
   padding: 0;
@@ -11,7 +11,7 @@ body {
   height: 100vh; }
 
 header {
-  background-color: #393e41;
+  background-color: #f7f4f3;
   width: 100%;
   padding: 20px;
   text-align: center; }
@@ -70,7 +70,7 @@ button {
   cursor: pointer;
   border-bottom: 1px solid #ccc; }
   .suggestion-item:hover {
-    background-color: #393e41;
+    background-color: #f7f4f3;
     color: white; }
 
 .result-container {
@@ -80,7 +80,7 @@ button {
   text-align: left; }
 
 h2 {
-  color: #393e41;
+  color: #f7f4f3;
   font-size: 1.8rem;
   margin-bottom: 10px; }
 
