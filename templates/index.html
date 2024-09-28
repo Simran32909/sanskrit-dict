@@ -3,18 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dictionary App</title>
+    <title>Sanskrit Dictionary</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="header-container">
-            <h1><a href="/">Welcome to Sanskrit Dictionary!</a></h1>
+            <h1><a href="/">Sanskrit Dictionary</a></h1>
         </div>
     </header>
 
-    <!-- Search Bar -->
     <div class="search-container">
         <form id="lookupForm">
             <div class="input-wrapper">
@@ -25,7 +23,6 @@
         </form>
     </div>
 
-    <!-- Results Section -->
     <div class="result-container">
         <div class="result">
             <h2 id="wordResult"></h2>
@@ -37,38 +34,38 @@
         const wordInput = document.getElementById('word');
         const suggestionsBox = document.getElementById('suggestions');
         const lookupForm = document.getElementById('lookupForm');
+        const meaningResult = document.getElementById('meaningResult');
+        const wordResult = document.getElementById('wordResult');
 
-        // Fetch suggestions when the user types
         wordInput.addEventListener('input', function() {
             let query = wordInput.value;
-
             if (query.length > 0) {
                 fetch(`/suggest?query=${query}`)
                 .then(response => response.json())
                 .then(data => {
-                    suggestionsBox.innerHTML = '';  // Clear previous suggestions
+                    suggestionsBox.innerHTML = '';
                     data.forEach(word => {
                         let suggestionItem = document.createElement('div');
                         suggestionItem.classList.add('suggestion-item');
                         suggestionItem.textContent = word;
                         suggestionItem.addEventListener('click', function() {
                             wordInput.value = word;
-                            suggestionsBox.innerHTML = '';  // Clear suggestions when word is selected
+                            suggestionsBox.innerHTML = '';
                         });
                         suggestionsBox.appendChild(suggestionItem);
                     });
                 });
             } else {
-                suggestionsBox.innerHTML = '';  // Clear suggestions if input is empty
+                suggestionsBox.innerHTML = '';
             }
         });
 
-        // Handle form submission to look up word
         lookupForm.addEventListener('submit', function(event) {
-            event.preventDefault();  // Prevent the form from reloading the page
+            event.preventDefault();
+            lookupWord(wordInput.value);
+        });
 
-            let word = wordInput.value;
-
+        function lookupWord(word) {
             fetch('/lookup', {
                 method: 'POST',
                 headers: {
@@ -78,10 +75,17 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('wordResult').textContent = data.word;
-                document.getElementById('meaningResult').textContent = data.meaning;
+                wordResult.textContent = data.word;
+                meaningResult.innerHTML = data.meaning;
+
+                document.querySelectorAll('.linked-word').forEach(item => {
+                    item.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        lookupWord(this.dataset.word);
+                    });
+                });
             });
-        });
+        }
     </script>
 </body>
 </html>

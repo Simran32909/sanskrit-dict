@@ -115,3 +115,12 @@ p {
     line-height: 1.5;
     color: $text-color;
 }
+
+.linked-word {
+    color: #8d2ee6;
+    text-decoration: underline;
+    cursor: pointer;
+    &:hover {
+        color: #42a698;
+    }
+}

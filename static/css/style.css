@@ -88,3 +88,10 @@ p {
   font-size: 1.2rem;
   line-height: 1.5;
   color: #333; }
+
+.linked-word {
+  color: #8d2ee6;
+  text-decoration: underline;
+  cursor: pointer; }
+  .linked-word:hover {
+    color: #42a698; }
