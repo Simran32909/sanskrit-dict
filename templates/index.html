@@ -243,16 +243,16 @@
                 document.querySelectorAll('.linked-word').forEach(item => {
                     item.addEventListener('click', function(e) {
                         e.preventDefault();
-                        wordInput.value = this.dataset.word; // Set input to the clicked word
-                        suggestionsBox.innerHTML = ''; // Clear suggestions
-                        hideTooltip(); // Hide the tooltip when clicked
-                        lookupWord(this.dataset.word); // Look up the word
+                        wordInput.value = this.dataset.word;
+                        suggestionsBox.innerHTML = '';
+                        hideTooltip();
+                        lookupWord(this.dataset.word);
                     });
                     item.addEventListener('mouseover', function(e) {
                         showTooltip(this.dataset.word, e.pageX, e.pageY);
                     });
                     item.addEventListener('mouseout', function() {
-                        hideTooltip(); // Hide tooltip when mouse leaves
+                        hideTooltip();
                     });
                 });
             });
