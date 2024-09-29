@@ -19,6 +19,6 @@ def convert_json(input_file, output_file):
     with open(output_file, 'w', encoding='utf-8') as json_file:
         json_file.write(json_data)
 
-input_f = 'dic-1.txt'
-output_f= 'dic-1.json'
+input_f = 'dic-3.txt'
+output_f= 'dic-3.json'
 convert_json(input_f, output_f)
