@@ -16,19 +16,22 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            transition: background 0.5s ease;
         }
 
         header {
             width: 100%;
-            background: linear-gradient(145deg, #92badc, #393e41);
+            background: rgba(50, 50, 50, 0.9);
             padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
         }
 
         header h1 a {
             text-decoration: none;
-            color: rgb(171, 218, 211);
+            color: #00c6ff;
             font-size: 36px;
             text-transform: uppercase;
             letter-spacing: 3px;
@@ -40,8 +43,9 @@
         }
 
         .search-container {
-            margin-top: 50px;
+            margin-top: 100px;
             text-align: center;
+            animation: fadeIn 1s ease-in-out;
         }
 
         .input-wrapper {
@@ -82,51 +86,6 @@
             transition: background 0.3s ease, transform 0.3s ease;
         }
 
-        .suggestions {
-            position: absolute;
-            left: 50%; /* Aligns left edge of the suggestions box to the center of the input */
-            transform: translateX(-46.5%); /* Adjusts the box to be centered */
-            background-color: #5c7378;
-            border-radius: 5px;
-            width: 550px;
-            max-height: 150px;
-            overflow-y: auto;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-        }
-
-
-        .suggestion-item {
-            padding: 12px;
-            cursor: pointer;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            color: #f5f5f5;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .suggestion-item:hover {
-            background-color: #48d5ff;
-            color: #ffffff;
-            transform: translateY(-2px);
-        }
-
-        .suggestion-item:last-child {
-            border-bottom: none;
-        }
-
-        .suggestions::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .suggestions::-webkit-scrollbar-thumb {
-            background-color: #3a3a3a;
-            border-radius: 10px;
-        }
-
-        .suggestions::-webkit-scrollbar-thumb:hover {
-            background-color: #00c6ff;
-        }
-
         button[type="submit"]:hover {
             background: linear-gradient(145deg, #00c6ff, #a6d6d0);
             transform: scale(1.05);
@@ -136,6 +95,9 @@
             margin-top: 50px;
             padding: 20px;
             text-align: center;
+            animation: fadeIn 1s ease-in-out;
+            max-height: max-content;
+            overflow-y: auto;
         }
 
         .result h2 {
@@ -147,13 +109,23 @@
         .result p {
             font-size: 20px;
             line-height: 1.6;
-            color: #f5f5f5;
+            color: #68813c;
+            transition: color 0.3s ease;
+        }
+
+        .result p:hover {
+            color: #00c6ff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .tooltip {
             position: absolute;
-            background: linear-gradient(145deg, #ffcc00, #ffcc00);
-            color: #333;
+            background: rgb(30, 96, 145);
+            color: #8bccbb;
             padding: 10px;
             border-radius: 8px;
             display: none;
@@ -171,6 +143,16 @@
             display: block;
             opacity: 1;
             transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        ::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: transparent;
         }
 
         .linked-word {
@@ -195,7 +177,7 @@
     <div class="search-container">
         <form id="lookupForm">
             <div class="input-wrapper">
-                <input type="text" id="word" name="word" placeholder="Search the dictionary..." autocomplete="off" required>
+                <label for="word"></label><input type="text" id="word" name="word" placeholder="Search the dictionary..." autocomplete="off" required>
                 <div class="suggestions" id="suggestions"></div>
             </div>
             <button type="submit">Search</button>
@@ -205,7 +187,9 @@
     <div class="result-container">
         <div class="result">
             <h2 id="wordResult"></h2>
-            <p id="meaningResult"></p>
+            <p id="meaningResult1"></p>
+            <p id="meaningResult2"></p>
+            <p id="meaningResult3"></p>
         </div>
     </div>
 
@@ -215,9 +199,25 @@
         const wordInput = document.getElementById('word');
         const suggestionsBox = document.getElementById('suggestions');
         const lookupForm = document.getElementById('lookupForm');
-        const meaningResult = document.getElementById('meaningResult');
         const wordResult = document.getElementById('wordResult');
         const tooltip = document.getElementById('tooltip');
+
+        async function fetchMeanings(word) {
+            try {
+                const response = await fetch('/lookup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ word: word })
+                });
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching meanings:', error);
+                return {};
+            }
+        }
 
         wordInput.addEventListener('input', function() {
             let query = wordInput.value;
@@ -242,61 +242,73 @@
             }
         });
 
-        lookupForm.addEventListener('submit', function(event) {
+        lookupForm.addEventListener('submit', function (event) {
             event.preventDefault();
-            lookupWord(wordInput.value);
+            const word = wordInput.value;
+
+            fetchMeanings(word)
+                .then(data => {
+                    if (data.word) {
+                        wordResult.textContent = data.word;
+                        document.getElementById('meaningResult1').innerHTML = data.meanings.dictionary1 || 'No meaning found in dictionary 1';
+                        document.getElementById('meaningResult2').innerHTML = data.meanings.dictionary2 || 'No meaning found in dictionary 2';
+                        document.getElementById('meaningResult3').innerHTML = data.meanings.dictionary3 || 'No meaning found in dictionary 3';
+
+                        document.querySelectorAll('.linked-word').forEach(link => {
+                            link.addEventListener('mouseover', showTooltip);
+                            link.addEventListener('mouseleave', hideTooltip);
+                            link.addEventListener('click', handleWordClick);
+                        });
+                    } else {
+                        wordResult.textContent = 'Word not found';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
         });
 
-        function lookupWord(word) {
-            fetch('/lookup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `word=${word}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                wordResult.textContent = data.word;
-                meaningResult.innerHTML = data.meaning;
+        function showTooltip(event) {
+            const linkedWord = event.target.textContent;
+            const rect = event.target.getBoundingClientRect();
 
-                document.querySelectorAll('.linked-word').forEach(item => {
-                    item.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        wordInput.value = this.dataset.word;
-                        suggestionsBox.innerHTML = '';
-                        hideTooltip();
-                        lookupWord(this.dataset.word);
-                    });
-                    item.addEventListener('mouseover', function(e) {
-                        showTooltip(this.dataset.word, e.pageX, e.pageY);
-                    });
-                    item.addEventListener('mouseout', function() {
-                        hideTooltip();
-                    });
+            tooltip.style.left = `${rect.left}px`;
+            tooltip.style.top = `${rect.bottom + window.scrollY}px`;
+
+            fetchMeanings(linkedWord)
+                .then(data => {
+                    tooltip.textContent = data.meanings.dictionary1 || 'No preview available';
+                    tooltip.classList.add('visible');
                 });
-            });
-        }
 
-        function showTooltip(word, x, y) {
-            fetch(`/lookup`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `word=${word}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                tooltip.textContent = data.meaning ? data.meaning : 'Meaning not found';
-                tooltip.style.left = `${x + 10}px`;
-                tooltip.style.top = `${y + 10}px`;
+            tooltip.addEventListener('mouseenter', function () {
                 tooltip.classList.add('visible');
+            });
+
+            tooltip.addEventListener('mouseleave', function () {
+                tooltip.classList.remove('visible');
             });
         }
 
         function hideTooltip() {
             tooltip.classList.remove('visible');
+        }
+
+        document.querySelectorAll('.linked-word').forEach(link => {
+            link.addEventListener('mouseover', showTooltip);
+            link.addEventListener('mouseleave', hideTooltip);
+        });
+
+
+        function handleWordClick(event) {
+            const linkedWord = event.target.textContent;
+            fetchMeanings(linkedWord)
+                .then(data => {
+                    wordResult.textContent = data.word;
+                    document.getElementById('meaningResult1').innerHTML = data.meanings.dictionary1 || 'No meaning found in dictionary 1';
+                    document.getElementById('meaningResult2').innerHTML = data.meanings.dictionary2 || 'No meaning found in dictionary 2';
+                    document.getElementById('meaningResult3').innerHTML = data.meanings.dictionary3 || 'No meaning found in dictionary 3';
+                });
         }
     </script>
 </body>
