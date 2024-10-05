@@ -76,7 +76,7 @@
         .input-wrapper {
             position: relative;
             width: 100%;
-            max-width: 600px; /* Increased max-width */
+            max-width: 600px;
             margin: 0 auto;
         }
 
@@ -134,23 +134,23 @@
 
         button:hover {
             background: linear-gradient(45deg, #0072ff, #00c6ff);
-            transform: translateY(-5px); /* Floating effect */
+            transform: translateY(-5px);
             box-shadow: 0px 8px 25px rgba(0, 198, 255, 0.5);
         }
 
         .dictionary-link {
-            font-size: 18px; /* Larger font size */
-            font-weight: bold; /* Bold for prominence */
-            color: #af358d; /* Different color to stand out */
-            text-decoration: none; /* Remove underline initially */
-            margin-right: 8px; /* Space between the link and the meaning text */
+            font-size: 18px;
+            font-weight: bold;
+            color: #af358d;
+            text-decoration: none;
+            margin-right: 8px;
             transition: color 0.3s ease, transform 0.3s ease;
         }
 
         .dictionary-link:hover {
-            color: #00c6ff; /* Change color on hover */
-            text-decoration: underline; /* Add underline on hover */
-            transform: scale(1.1); /* Slightly enlarge on hover */
+            color: #00c6ff;
+            text-decoration: underline;
+            transform: scale(1.1);
         }
 
         .result-container {
@@ -159,8 +159,8 @@
             animation: fadeIn 1s ease-in-out;
             max-height: none;
             overflow-y: auto;
-            background: rgba(40, 40, 40, 0.8); /* Added background for contrast */
-            border-radius: 10px; /* Rounded corners */
+            background: rgba(40, 40, 40, 0.8);
+            border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
 
@@ -175,17 +175,17 @@
             line-height: 1.6;
             color: #68813c;
             transition: color 0.3s ease;
-            padding: 10px; /* Padding for better spacing */
-            border-radius: 5px; /* Slight rounding for result paragraphs */
-            background: rgba(50, 50, 50, 0.6); /* Background for better visibility */
+            padding: 10px;
+            border-radius: 5px;
+            background: rgba(50, 50, 50, 0.6);
             animation: bounce 0.5s;
         }
 
         .result p:hover {
             color: #00c6ff;
-            transform: scale(1.02); /* Slightly scale on hover */
-            transition: color 0.3s ease, transform 0.3s ease; /* Transition for smoothness */
-            background: rgba(100, 100, 100, 0.8); /* Darken background slightly on hover */
+            transform: scale(1.02);
+            transition: color 0.3s ease, transform 0.3s ease;
+            background: rgba(100, 100, 100, 0.8);
         }
 
         nav ul {
@@ -218,16 +218,16 @@
                 transform: translateY(0);
             }
             40% {
-                transform: translateY(-10px); /* Bounce up */
+                transform: translateY(-10px);
             }
             60% {
-                transform: translateY(-5px); /* Slight bounce back down */
+                transform: translateY(-5px);
             }
         }
 
         .result p:hover .dictionary-link {
-            color: #35b5dd; /* Change to blue when the container is hovered */
-            text-decoration: underline; /* Ensure it remains underlined */
+            color: #35b5dd;
+            text-decoration: underline;
         }
 
         .tooltip {
@@ -250,8 +250,8 @@
         .tooltip.visible {
             display: block;
             opacity: 1;
-            transform: translateY(0) scale(1.05); /* Slightly enlarge tooltip on show */
-            transition: opacity 0.3s ease, transform 0.3s ease; /* Transition for smoothness */
+            transform: translateY(0) scale(1.05);
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         ::-webkit-scrollbar {
@@ -495,17 +495,13 @@
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
         if (scrollTop > lastScrollTop) {
-            // User is scrolling down, hide the header
-            header.style.top = "-80px"; // Adjust this value based on your header height
+            header.style.top = "-80px";
         } else {
-            // User is scrolling up, show the header
             header.style.top = "0";
         }
 
         lastScrollTop = scrollTop;
     });
 </script>
-
-
 </body>
 </html>
