@@ -28,10 +28,6 @@ Before running this project, ensure you have the following installed on your sys
    ```bash
    pip install -r requirements.txt
 
-3. **Run the SCSS compiler to generate the CSS file from SCSS:**:
-   ```bash
-   python compile_scss.py
-
-4. **Run the Flask application:**:
+3. **Run the Flask application:**:
    ```bash
    python main.py
