@@ -4,19 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>संस्कृत शब्दकोशः</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
         body {
             margin: 0;
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1e1e1e, #3a3a3a);
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(420deg, #000000, rgb(174, 201, 216));
             min-height: 100vh;
-            color: #f5f5f5;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             transition: background 0.5s ease;
+            overflow-y: scroll;
+            padding-top: 160px;
         }
 
         header {
@@ -28,6 +32,7 @@
             top: 0;
             z-index: 1000;
             text-align: center;
+            transition: top 0.3s;
         }
 
         header h1 a {
@@ -56,9 +61,16 @@
         }
 
         .search-container {
-            margin-top: 100px;
-            text-align: center;
-            animation: fadeIn 1s ease-in-out;
+            margin-top: 1px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            flex-grow: 1;
+            padding: 20px;
         }
 
         .input-wrapper {
@@ -88,16 +100,9 @@
             transform: scale(1.05);
         }
 
-        .footer {
-            background-color: #2c2c2c;
-            padding: 20px;
-            text-align: center;
-            color: #ccc;
-        }
-
         button[type="submit"] {
             margin-top: 20px;
-            padding: 12px 40px;
+            padding: 12px 30px;
             background: linear-gradient(145deg, #6ceefd, #393e41);
             color: #fff;
             font-size: 16px;
@@ -109,7 +114,7 @@
         }
 
         button[type="submit"]:hover {
-            background: linear-gradient(145deg, #00c6ff, #a6d6d0);
+            background: linear-gradient(145deg, #42707e, #a6d6d0);
             transform: scale(1.1);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
         }
@@ -133,13 +138,26 @@
             box-shadow: 0px 8px 25px rgba(0, 198, 255, 0.5);
         }
 
+        .dictionary-link {
+            font-size: 18px; /* Larger font size */
+            font-weight: bold; /* Bold for prominence */
+            color: #af358d; /* Different color to stand out */
+            text-decoration: none; /* Remove underline initially */
+            margin-right: 8px; /* Space between the link and the meaning text */
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .dictionary-link:hover {
+            color: #00c6ff; /* Change color on hover */
+            text-decoration: underline; /* Add underline on hover */
+            transform: scale(1.1); /* Slightly enlarge on hover */
+        }
 
         .result-container {
-            margin-top: 50px;
-            padding: 20px;
+            padding: 30px;
             text-align: center;
             animation: fadeIn 1s ease-in-out;
-            max-height: max-content;
+            max-height: none;
             overflow-y: auto;
             background: rgba(40, 40, 40, 0.8); /* Added background for contrast */
             border-radius: 10px; /* Rounded corners */
@@ -207,6 +225,11 @@
             }
         }
 
+        .result p:hover .dictionary-link {
+            color: #35b5dd; /* Change to blue when the container is hovered */
+            text-decoration: underline; /* Ensure it remains underlined */
+        }
+
         .tooltip {
             position: absolute;
             background: rgb(8, 60, 97);
@@ -250,6 +273,9 @@
         .linked-word:hover {
             color: #ffcc00;
         }
+
+
+
     </style>
 </head>
 <body>
@@ -257,7 +283,7 @@
 <header>
     <div class="header-container">
         <div class="logo">
-            <a href="#">Vākyakoṣa (वाक्यकोष)</a>
+            <a href="#">वाक्यकोष</a>
         </div>
         <nav>
             <ul>
@@ -286,17 +312,41 @@
 
     <div class="dictionary-results"></div>
 
-    <div class="result-container" style="display: none">
-        <div class="result">
-            <h2 id="wordResult"></h2>
-            <p id="meaningResult1"></p>
-            <p id="meaningResult2"></p>
-            <p id="meaningResult3"></p>
-        </div>
+<div class="result-container" style="display: none">
+    <div class="result">
+        <h2 id="wordResult"></h2>
+        <p id="meaningResult1"></p>
+        <p id="meaningResult2"></p>
+        <p id="meaningResult3"></p>
     </div>
+</div>
 
-    <div id="tooltip" class="tooltip"></div>
+<div id="tooltip" class="tooltip"></div>
 
+<footer>
+    <div class="footer-container">
+        <div class="footer-links">
+            <a href="#about">About Us</a>
+            <a href="#privacy">Privacy Policy</a>
+            <a href="#contact">Contact Us</a>
+        </div>
+        <div class="social-media">
+            <a href="#" class="social-icon" title="Facebook">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="social-icon" title="Twitter">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="social-icon" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        </div>
+
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2024 वाक्यकोष. All Rights Reserved.</p>
+    </div>
+</footer>
 
 <script>
     const wordInput = document.getElementById('word');
@@ -360,9 +410,10 @@
             .then(data => {
                 if (data.word) {
                     wordResult.textContent = data.word;
-                    document.getElementById('meaningResult1').innerHTML = data.meanings.dictionary1 || 'No meaning found in dictionary 1';
-                    document.getElementById('meaningResult2').innerHTML = data.meanings.dictionary2 || 'No meaning found in dictionary 2';
-                    document.getElementById('meaningResult3').innerHTML = data.meanings.dictionary3 || 'No meaning found in dictionary 3';
+                    document.getElementById('meaningResult1').innerHTML = `<a href="#" class="dictionary-link">Dictionary 1:</a> ${data.meanings.dictionary1 || 'No meaning found in dictionary 1'}`;
+                    document.getElementById('meaningResult2').innerHTML = `<a href="#" class="dictionary-link">Dictionary 2:</a> ${data.meanings.dictionary2 || 'No meaning found in dictionary 2'}`;
+                    document.getElementById('meaningResult3').innerHTML = `<a href="#" class="dictionary-link">Dictionary 3:</a> ${data.meanings.dictionary3 || 'No meaning found in dictionary 3'}`;
+
 
                     document.querySelector('.result-container').style.display = 'block';
 
@@ -436,7 +487,25 @@
     document.addEventListener('selectstart', function (e) {
         e.preventDefault();
     });
+
+    let lastScrollTop = 0;
+    const header = document.querySelector("header");
+
+    window.addEventListener("scroll", function () {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (scrollTop > lastScrollTop) {
+            // User is scrolling down, hide the header
+            header.style.top = "-80px"; // Adjust this value based on your header height
+        } else {
+            // User is scrolling up, show the header
+            header.style.top = "0";
+        }
+
+        lastScrollTop = scrollTop;
+    });
 </script>
+
 
 </body>
 </html>
